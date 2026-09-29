@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Itinerary, type ItineraryItem } from "@/components/itinerary";
 import { PlacesSection } from "@/components/places";
+import { TripMap } from "@/components/map";
 import type { SavedPlace } from "@/lib/places/types";
 
 type TripDetailsProps = {
@@ -45,6 +46,8 @@ export function TripDetails({
         places={savedPlaces}
         initialItems={initialItems}
       />
+
+      <TripMap places={savedPlaces} />
 
       <PlacesSection
         tripId={tripId}
