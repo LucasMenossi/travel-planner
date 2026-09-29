@@ -34,6 +34,9 @@ export class GeoapifyGeocodingProvider implements GeocodingProvider {
 
     const response = await fetch(
       `${GEOAPIFY_API_URL}?${searchParams.toString()}`,
+      {
+        next: { revalidate: 3600 },
+      },
     );
 
     if (!response.ok) {

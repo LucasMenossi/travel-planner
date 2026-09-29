@@ -33,7 +33,7 @@ export class GeoapifyPlacesProvider implements PlacesProvider {
       apiKey: getApiKey(),
       categories: params.categories.join(","),
       filter: `circle:${params.longitude},${params.latitude},${params.radius ?? 5000}`,
-      limit: String(params.limit ?? 20),
+      limit: String(params.limit ?? 10),
       lang: "en",
     });
 
@@ -43,6 +43,9 @@ export class GeoapifyPlacesProvider implements PlacesProvider {
 
     const response = await fetch(
       `${GEOAPIFY_API_URL}/places?${searchParams.toString()}`,
+      {
+        next: { revalidate: 300 },
+      },
     );
 
     if (!response.ok) {

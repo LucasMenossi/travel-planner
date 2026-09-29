@@ -45,7 +45,7 @@ export async function searchTripPlaces({
     longitude: coordinates.longitude,
     categories,
     radius,
-    limit,
+    limit: limit ?? 10,
     offset,
   });
 

@@ -1,4 +1,5 @@
 "use client";
+
 import { getCategoryLabel } from "@/lib/places/category-label";
 
 import { useState } from "react";
@@ -33,13 +34,9 @@ export function PlaceDiscovery({
   onPlaceSaved,
 }: PlaceDiscoveryProps) {
   const [category, setCategory] = useState(CATEGORIES[0].value);
-
   const [places, setPlaces] = useState<PlaceResult[]>([]);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [error, setError] = useState<string | null>(null);
-
   const [savingPlaceId, setSavingPlaceId] = useState<string | null>(null);
 
   const savedPlaceIds = new Set(savedPlaces.map((place) => place.externalId));
