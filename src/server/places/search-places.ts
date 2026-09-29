@@ -36,9 +36,6 @@ export async function searchTripPlaces({
 
   const coordinates = await geocodingProvider.geocode(currentTrip.destination);
 
-  console.log("destination:", currentTrip.destination);
-  console.log("coordinates:", coordinates);
-
   if (!coordinates) {
     return [];
   }
@@ -51,8 +48,6 @@ export async function searchTripPlaces({
     limit,
     offset,
   });
-
-  console.log("places:", places);
 
   return places;
 }

@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-
-import { getCurrentSession } from "@/lib/auth/session";
 import { savePlaceSchema, searchPlacesSchema } from "@/lib/validation/places";
 import { searchTripPlaces } from "@/server/places/search-places";
 import { savePlace } from "@/server/places/mutations";
+import { getSession } from "@/lib/auth-session";
 
 type RouteContext = {
   params: Promise<{
@@ -13,7 +12,7 @@ type RouteContext = {
 };
 
 export async function GET(request: Request, { params }: RouteContext) {
-  const session = await getCurrentSession();
+  const session = await getSession();
 
   if (!session) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
@@ -65,7 +64,7 @@ export async function GET(request: Request, { params }: RouteContext) {
 }
 
 export async function POST(request: Request, { params }: RouteContext) {
-  const session = await getCurrentSession();
+  const session = await getSession();
 
   if (!session) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });

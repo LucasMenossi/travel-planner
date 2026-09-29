@@ -59,3 +59,29 @@ export async function savePlace(input: SavePlaceInput) {
 
   return existingPlace ?? null;
 }
+
+export async function deletePlace({
+  tripId,
+  placeId,
+  userId,
+}: {
+  tripId: string;
+  placeId: string;
+  userId: string;
+}) {
+  const [currentTrip] = await db
+    .select({ id: trip.id })
+    .from(trip)
+    .where(and(eq(trip.id, tripId), eq(trip.userId, userId)));
+
+  if (!currentTrip) {
+    throw new Error("Trip not found.");
+  }
+
+  const [deletedPlace] = await db
+    .delete(place)
+    .where(and(eq(place.id, placeId), eq(place.tripId, tripId)))
+    .returning();
+
+  return deletedPlace ?? null;
+}

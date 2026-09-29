@@ -2,9 +2,10 @@ import Link from "next/link";
 import { ArrowLeft, CalendarDays, MapPin } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
+import { PlacesSection } from "@/components/places/PlacesSection";
 import { getSession } from "@/lib/auth-session";
-import { getTripById } from "@/server/trips/queries";
 import { getPlacesByTripId } from "@/server/places/queries";
+import { getTripById } from "@/server/trips/queries";
 
 type TripPageProps = {
   params: Promise<{
@@ -27,86 +28,58 @@ export default async function TripPage({ params }: TripPageProps) {
     notFound();
   }
 
-  const places = await getPlacesByTripId(trip.id);
+  const places = await getPlacesByTripId(trip.id, session.user.id);
+
+  const serializedPlaces = places.map((place) => ({
+    ...place,
+    createdAt: place.createdAt.toISOString(),
+  }));
 
   return (
-    <main className="min-h-svh bg-background">
-      <div className="mx-auto max-w-6xl px-6 py-10">
+    <main className="mx-auto max-w-6xl px-6 py-10">
+      <div className="space-y-8">
         <Link
           href="/trips"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
           Back to trips
         </Link>
 
-        <header className="mt-8">
-          <p className="text-xs font-medium tracking-wide text-primary">TRIP</p>
+        <header className="space-y-4">
+          <div>
+            <h1 className="font-heading text-3xl font-semibold tracking-tight">
+              {trip.name}
+            </h1>
 
-          <h1 className="mt-2 text-4xl font-semibold tracking-[-0.04em]">
-            {trip.name}
-          </h1>
+            <div className="mt-3 flex flex-wrap gap-4 text-sm text-muted-foreground">
+              {trip.destination && (
+                <div className="flex items-center gap-2">
+                  <MapPin className="size-4" />
+                  <span>{trip.destination}</span>
+                </div>
+              )}
 
-          <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-2">
-              <MapPin className="size-4" />
-              {trip.destination}
-            </span>
-
-            <span className="flex items-center gap-2">
-              <CalendarDays className="size-4" />
-              {formatDateRange(trip.startDate, trip.endDate)}
-            </span>
+              <div className="flex items-center gap-2">
+                <CalendarDays className="size-4" />
+                <span>
+                  {trip.startDate} — {trip.endDate}
+                </span>
+              </div>
+            </div>
           </div>
         </header>
 
-        <section className="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-          <div className="rounded-2xl border bg-card p-6">
-            <h2 className="font-semibold">Itinerary</h2>
+        <section className="rounded-2xl border bg-card p-6">
+          <h2 className="font-heading text-xl font-semibold">Itinerary</h2>
 
-            <p className="mt-2 text-sm text-muted-foreground">
-              Your itinerary will appear here.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border bg-card p-6">
-            <h2 className="font-semibold">Saved places</h2>
-
-            {places.length === 0 ? (
-              <p className="mt-2 text-sm text-muted-foreground">
-                Places you save for this trip will appear here.
-              </p>
-            ) : (
-              <ul className="mt-4 space-y-3">
-                {places.map((place) => (
-                  <li key={place.id}>
-                    <p className="font-medium">{place.name}</p>
-
-                    {place.address && (
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {place.address}
-                      </p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Your itinerary will appear here.
+          </p>
         </section>
+
+        <PlacesSection tripId={trip.id} initialPlaces={serializedPlaces} />
       </div>
     </main>
   );
-}
-
-function formatDateRange(startDate: string, endDate: string) {
-  const start = new Date(`${startDate}T00:00:00`);
-  const end = new Date(`${endDate}T00:00:00`);
-
-  const formatter = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-
-  return `${formatter.format(start)} - ${formatter.format(end)}`;
 }
