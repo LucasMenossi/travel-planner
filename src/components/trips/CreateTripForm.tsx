@@ -8,10 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import {
-  createTripSchema,
-  type CreateTripFormData,
-} from "@/lib/validation/trips";
+import { tripSchema, type TripFormData } from "@/lib/validation/trips";
 
 export function CreateTripForm() {
   const router = useRouter();
@@ -20,8 +17,8 @@ export function CreateTripForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<CreateTripFormData>({
-    resolver: zodResolver(createTripSchema),
+  } = useForm<TripFormData>({
+    resolver: zodResolver(tripSchema),
     defaultValues: {
       name: "",
       destination: "",
@@ -31,7 +28,7 @@ export function CreateTripForm() {
     },
   });
 
-  async function onSubmit(data: CreateTripFormData) {
+  async function onSubmit(data: TripFormData) {
     const response = await fetch("/api/trips", {
       method: "POST",
       headers: {
