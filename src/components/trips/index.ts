@@ -1,3 +1,4 @@
-export { TripDetails } from "./TripDetails";
+export { DeleteTripButton } from "./DeleteTripButton";
 export { TripCard } from "./TripCard";
-export { CreateTripForm } from "./CreateTripForm";
+export { TripDetails } from "./TripDetails";
+export { TripForm } from "./TripForm";

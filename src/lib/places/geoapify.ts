@@ -34,6 +34,7 @@ export class GeoapifyPlacesProvider implements PlacesProvider {
       categories: params.categories.join(","),
       filter: `circle:${params.longitude},${params.latitude},${params.radius ?? 5000}`,
       limit: String(params.limit ?? 20),
+      lang: "en",
     });
 
     if (params.offset !== undefined) {

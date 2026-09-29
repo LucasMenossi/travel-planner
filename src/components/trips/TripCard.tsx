@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { CalendarDays, MapPin } from "lucide-react";
+import { CalendarDays, MapPin, Pencil } from "lucide-react";
 
+import { DeleteTripButton } from "./DeleteTripButton";
 import type { trip } from "@/lib/db/schema";
 
 type Trip = typeof trip.$inferSelect;
@@ -11,41 +12,54 @@ type TripCardProps = {
 
 export function TripCard({ trip }: TripCardProps) {
   return (
-    <Link
-      href={`/trips/${trip.id}`}
-      className="group overflow-hidden rounded-2xl border bg-card transition-all hover:-translate-y-0.5 hover:shadow-lg"
-    >
-      <div className="relative aspect-video overflow-hidden bg-muted">
-        {trip.coverImageUrl ? (
-          <img
-            src={trip.coverImageUrl}
-            alt=""
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center bg-secondary">
-            <MapPin className="size-8 text-muted-foreground/50" />
-          </div>
-        )}
-      </div>
-
-      <div className="space-y-3 p-5">
-        <div>
-          <h2 className="font-semibold tracking-tight">{trip.name}</h2>
-
-          <div className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="size-3.5" />
-            <span>{trip.destination}</span>
-          </div>
+    <article className="overflow-hidden rounded-2xl border bg-card transition-shadow hover:shadow-lg">
+      <Link
+        href={`/trips/${trip.id}`}
+        className="group block"
+      >
+        <div className="relative aspect-video overflow-hidden bg-muted">
+          {trip.coverImageUrl ? (
+            <img
+              src={trip.coverImageUrl}
+              alt=""
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-secondary">
+              <MapPin className="size-8 text-muted-foreground/50" />
+            </div>
+          )}
         </div>
 
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <CalendarDays className="size-3.5" />
+        <div className="space-y-3 p-5 pb-4">
+          <div>
+            <h2 className="font-semibold tracking-tight">{trip.name}</h2>
 
-          <span>{formatDateRange(trip.startDate, trip.endDate)}</span>
+            <div className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+              <MapPin className="size-3.5" />
+              <span>{trip.destination}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <CalendarDays className="size-3.5" />
+            <span>{formatDateRange(trip.startDate, trip.endDate)}</span>
+          </div>
         </div>
+      </Link>
+
+      <div className="flex items-center justify-end gap-1 border-t px-4 py-3">
+        <Link
+          href={`/trips/${trip.id}/edit`}
+          className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <Pencil className="size-3.5" />
+          Edit
+        </Link>
+
+        <DeleteTripButton tripId={trip.id} variant="icon" />
       </div>
-    </Link>
+    </article>
   );
 }
 

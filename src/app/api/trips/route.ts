@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getSession } from "@/lib/auth-session";
 import { createTrip } from "@/server/trips/mutations";
-import { createTripSchema } from "@/lib/validation/trips";
+import { tripSchema } from "@/lib/validation/trips";
 
 export async function POST(request: Request) {
   const session = await getSession();
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
   const body = await request.json();
 
-  const result = createTripSchema.safeParse(body);
+  const result = tripSchema.safeParse(body);
 
   if (!result.success) {
     return NextResponse.json(

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { CreateTripForm } from "@/components/trips";
+import { TripForm } from "@/components/trips";
 import { getSession } from "@/lib/auth-session";
 
 export default async function NewTripPage() {
@@ -39,7 +39,7 @@ export default async function NewTripPage() {
         </div>
 
         <div className="rounded-2xl border bg-card p-6 shadow-sm md:p-8">
-          <CreateTripForm />
+          <TripForm />
         </div>
       </div>
     </main>

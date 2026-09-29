@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createTripSchema = z
+export const tripSchema = z
   .object({
     name: z
       .string()
@@ -30,4 +30,4 @@ export const createTripSchema = z
     path: ["endDate"],
   });
 
-export type CreateTripFormData = z.infer<typeof createTripSchema>;
+export type TripFormData = z.infer<typeof tripSchema>;
