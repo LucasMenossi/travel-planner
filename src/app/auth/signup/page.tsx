@@ -5,9 +5,9 @@ import { SignupForm } from "@/components/auth/SignupForm";
 
 export default function SignupPage() {
   return (
-    <main className="min-h-svh bg-background p-3 md:p-4">
-      <div className="mx-auto grid min-h-[calc(100svh-2rem)] max-w-6xl overflow-hidden rounded-3xl border bg-card shadow-[0_24px_80px_-32px_rgba(30,30,30,0.25)] md:grid-cols-[0.9fr_1.1fr]">
-        <section className="relative hidden overflow-hidden bg-[#18232B] p-8 text-white md:flex md:flex-col">
+    <main className="min-h-svh bg-background p-4 md:p-6">
+      <div className="mx-auto grid min-h-[calc(100svh-2rem)] max-w-6xl overflow-hidden rounded-3xl border bg-card shadow-[0_24px_80px_-32px_rgba(30,30,30,0.25)] md:grid-cols-[0.9fr_1.1fr] md:min-h-[calc(100svh-3rem)]">
+        <section className="relative hidden overflow-hidden bg-[#18232B] p-10 text-white md:flex md:flex-col">
           <div className="relative z-10 flex items-center gap-2">
             <div className="flex size-9 items-center justify-center rounded-xl bg-[#E76F51]">
               <Plane className="size-4" strokeWidth={2.5} />
@@ -19,7 +19,7 @@ export default function SignupPage() {
           </div>
 
           <div className="relative z-10 mt-auto max-w-sm">
-            <p className="mb-3 text-xs font-medium tracking-wide text-[#E76F51]">
+            <p className="mb-4 text-sm font-medium text-[#E76F51]">
               YOUR TRIP, YOUR WAY
             </p>
 
@@ -27,27 +27,10 @@ export default function SignupPage() {
               Turn places you want to visit into a trip worth remembering.
             </h1>
 
-            <p className="mt-4 max-w-sm text-sm leading-6 text-white/65">
+            <p className="mt-5 max-w-sm text-sm leading-6 text-white/65">
               Organize your itinerary, save places and see your plans come
               together on the map.
             </p>
-          </div>
-
-          <div className="relative z-10 mt-6 flex items-center gap-6 border-t border-white/10 pt-4 text-xs text-white/45">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="size-3.5" />
-              Places
-            </span>
-
-            <span className="flex items-center gap-1.5">
-              <Route className="size-3.5" />
-              Itinerary
-            </span>
-
-            <span className="flex items-center gap-1.5">
-              <Plane className="size-3.5" />
-              Trips
-            </span>
           </div>
 
           <div
@@ -64,11 +47,33 @@ export default function SignupPage() {
             aria-hidden="true"
             className="absolute right-32 top-[48%] size-3 rounded-full bg-[#E76F51] shadow-[0_0_0_8px_rgba(231,111,81,0.12)]"
           />
+
+          <div
+            aria-hidden="true"
+            className="absolute bottom-10 left-10 right-10 border-t border-white/10"
+          />
+
+          <div className="relative z-10 mt-8 flex items-center gap-6 text-xs text-white/45">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="size-3.5" />
+              Places
+            </span>
+
+            <span className="flex items-center gap-1.5">
+              <Route className="size-3.5" />
+              Itinerary
+            </span>
+
+            <span className="flex items-center gap-1.5">
+              <Plane className="size-3.5" />
+              Trips
+            </span>
+          </div>
         </section>
 
-        <section className="flex items-center justify-center px-6 py-8 md:px-12 lg:px-16">
+        <section className="flex items-center justify-center px-6 py-12 md:px-12 lg:px-20">
           <div className="w-full max-w-md">
-            <div className="mb-6 md:hidden">
+            <div className="mb-10 md:hidden">
               <Link
                 href="/"
                 className="flex items-center gap-2 text-sm font-semibold tracking-tight"
@@ -80,16 +85,14 @@ export default function SignupPage() {
               </Link>
             </div>
 
-            <div className="mb-6 space-y-2">
-              <p className="text-xs font-medium tracking-wide text-primary">
-                GET STARTED
-              </p>
+            <div className="mb-8 space-y-3">
+              <p className="text-sm font-medium text-primary">GET STARTED</p>
 
-              <h2 className="text-3xl font-semibold tracking-[-0.035em]">
+              <h2 className="text-3xl font-semibold tracking-[-0.035em] md:text-[2.1rem]">
                 Create your account
               </h2>
 
-              <p className="max-w-sm text-sm leading-5 text-muted-foreground">
+              <p className="max-w-sm text-sm leading-6 text-muted-foreground">
                 Start planning your next adventure and keep your itinerary in
                 one place.
               </p>
@@ -97,14 +100,9 @@ export default function SignupPage() {
 
             <SignupForm />
 
-            <p className="mt-5 text-center text-xs text-muted-foreground">
-              Already have an account?{" "}
-              <Link
-                href="/auth/login"
-                className="font-medium text-foreground underline underline-offset-4"
-              >
-                Sign in
-              </Link>
+            <p className="mt-8 text-center text-xs leading-5 text-muted-foreground">
+              By creating an account, you agree to use Travel Planner for
+              personal trip planning.
             </p>
           </div>
         </section>

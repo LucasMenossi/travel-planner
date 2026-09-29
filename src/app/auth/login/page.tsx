@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { MapPin, Plane, Route } from "lucide-react";
 
-import { SignupForm } from "@/components/auth/SignupForm";
+import { LoginForm } from "@/components/auth/LoginForm";
 
-export default function SignupPage() {
+export default function LoginPage() {
   return (
     <main className="min-h-svh bg-background p-3 md:p-4">
       <div className="mx-auto grid min-h-[calc(100svh-2rem)] max-w-6xl overflow-hidden rounded-3xl border bg-card shadow-[0_24px_80px_-32px_rgba(30,30,30,0.25)] md:grid-cols-[0.9fr_1.1fr]">
@@ -20,16 +20,16 @@ export default function SignupPage() {
 
           <div className="relative z-10 mt-auto max-w-sm">
             <p className="mb-3 text-xs font-medium tracking-wide text-[#E76F51]">
-              YOUR TRIP, YOUR WAY
+              WELCOME BACK
             </p>
 
             <h1 className="text-4xl font-semibold leading-[1.08] tracking-[-0.04em]">
-              Turn places you want to visit into a trip worth remembering.
+              Your next adventure is waiting.
             </h1>
 
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/65">
-              Organize your itinerary, save places and see your plans come
-              together on the map.
+              Pick up where you left off and continue planning your trips,
+              places and itinerary.
             </p>
           </div>
 
@@ -82,30 +82,19 @@ export default function SignupPage() {
 
             <div className="mb-6 space-y-2">
               <p className="text-xs font-medium tracking-wide text-primary">
-                GET STARTED
+                WELCOME BACK
               </p>
 
               <h2 className="text-3xl font-semibold tracking-[-0.035em]">
-                Create your account
+                Sign in
               </h2>
 
               <p className="max-w-sm text-sm leading-5 text-muted-foreground">
-                Start planning your next adventure and keep your itinerary in
-                one place.
+                Sign in to continue planning your trips.
               </p>
             </div>
 
-            <SignupForm />
-
-            <p className="mt-5 text-center text-xs text-muted-foreground">
-              Already have an account?{" "}
-              <Link
-                href="/auth/login"
-                className="font-medium text-foreground underline underline-offset-4"
-              >
-                Sign in
-              </Link>
-            </p>
+            <LoginForm />
           </div>
         </section>
       </div>
