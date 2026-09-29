@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { CreateTripForm } from "@/components/trips/CreateTripForm";
+import { CreateTripForm } from "@/components/trips";
 import { getSession } from "@/lib/auth-session";
 
 export default async function NewTripPage() {

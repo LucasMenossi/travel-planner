@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { TripCard } from "@/components/trips/TripCard";
+import { TripCard } from "@/components/trips";
 import { getSession } from "@/lib/auth-session";
 import { getTripsByUserId } from "@/server/trips/queries";
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MapPin, Plane, Route } from "lucide-react";
 
-import { SignupForm } from "@/components/auth/SignupForm";
+import { SignupForm } from "@/components/auth";
 
 export default function SignupPage() {
   return (

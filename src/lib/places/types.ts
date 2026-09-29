@@ -5,7 +5,6 @@ export type SearchPlacesParams = {
   radius?: number;
   limit?: number;
   offset?: number;
-  lang?: string;
 };
 
 export type PlaceResult = {
@@ -16,6 +15,11 @@ export type PlaceResult = {
   longitude: number | null;
   category: string | null;
   imageUrl: string | null;
+};
+
+export type SavedPlace = PlaceResult & {
+  id: string;
+  createdAt: string;
 };
 
 export interface PlacesProvider {

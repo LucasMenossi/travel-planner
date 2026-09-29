@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MapPin, Plane, Route } from "lucide-react";
 
-import { LoginForm } from "@/components/auth/LoginForm";
+import { LoginForm } from "@/components/auth";
 
 export default function LoginPage() {
   return (

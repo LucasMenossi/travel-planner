@@ -1,12 +1,9 @@
-import type { PlaceResult } from "./types";
+import type { PlaceResult, SavedPlace } from "./types";
+
+export type { PlaceResult, SavedPlace } from "./types";
 
 type SearchPlacesResponse = {
   data: PlaceResult[];
-};
-
-export type SavedPlace = PlaceResult & {
-  id: string;
-  createdAt: string;
 };
 
 type SavePlaceResponse = {
@@ -30,7 +27,6 @@ export async function searchTripPlaces(
   }
 
   const result = (await response.json()) as SearchPlacesResponse;
-
   return result.data;
 }
 
@@ -51,7 +47,6 @@ export async function saveTripPlace(
   }
 
   const result = (await response.json()) as SavePlaceResponse;
-
   return result.data;
 }
 

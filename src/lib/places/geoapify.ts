@@ -40,10 +40,6 @@ export class GeoapifyPlacesProvider implements PlacesProvider {
       searchParams.set("offset", String(params.offset));
     }
 
-    if (params.lang) {
-      searchParams.set("lang", params.lang);
-    }
-
     const response = await fetch(
       `${GEOAPIFY_API_URL}/places?${searchParams.toString()}`,
     );

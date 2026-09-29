@@ -1,42 +1,35 @@
 "use client";
 
-import { useState } from "react";
-
-import { type SavedPlace } from "@/lib/places/client";
+import type { SavedPlace } from "@/lib/places/types";
 
 import { PlaceDiscovery } from "./PlaceDiscovery";
 import { SavedPlaces } from "./SavedPlaces";
 
 type PlacesSectionProps = {
   tripId: string;
-  initialPlaces: SavedPlace[];
+  savedPlaces: SavedPlace[];
+  onPlaceSaved: (place: SavedPlace) => void;
+  onPlaceRemoved: (placeId: string) => void;
 };
 
-export function PlacesSection({ tripId, initialPlaces }: PlacesSectionProps) {
-  const [savedPlaces, setSavedPlaces] = useState<SavedPlace[]>(initialPlaces);
-
-  function handlePlaceSaved(place: SavedPlace) {
-    setSavedPlaces((current) => [...current, place]);
-  }
-
-  function handlePlaceRemoved(placeId: string) {
-    setSavedPlaces((current) =>
-      current.filter((place) => place.id !== placeId),
-    );
-  }
-
+export function PlacesSection({
+  tripId,
+  savedPlaces,
+  onPlaceSaved,
+  onPlaceRemoved,
+}: PlacesSectionProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <SavedPlaces
         tripId={tripId}
         places={savedPlaces}
-        onPlaceRemoved={handlePlaceRemoved}
+        onPlaceRemoved={onPlaceRemoved}
       />
 
       <PlaceDiscovery
         tripId={tripId}
         savedPlaces={savedPlaces}
-        onPlaceSaved={handlePlaceSaved}
+        onPlaceSaved={onPlaceSaved}
       />
     </div>
   );

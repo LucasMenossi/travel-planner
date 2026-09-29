@@ -1,13 +1,10 @@
 "use client";
+import { getCategoryLabel } from "@/lib/places/category-label";
 
 import { useState } from "react";
 
-import {
-  saveTripPlace,
-  searchTripPlaces,
-  type SavedPlace,
-} from "@/lib/places/client";
-import type { PlaceResult } from "@/lib/places/types";
+import { saveTripPlace, searchTripPlaces } from "@/lib/places/client";
+import type { PlaceResult, SavedPlace } from "@/lib/places/types";
 
 type PlaceDiscoveryProps = {
   tripId: string;
@@ -136,14 +133,14 @@ export function PlaceDiscovery({
       )}
 
       {availablePlaces.length > 0 && (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {availablePlaces.map((place) => {
             const isSaving = savingPlaceId === place.externalId;
 
             return (
               <article
                 key={place.externalId}
-                className="rounded-xl border bg-card p-5"
+                className="flex h-full flex-col rounded-xl border bg-card p-5"
               >
                 <div className="space-y-2">
                   <h3 className="font-semibold">{place.name}</h3>
@@ -156,7 +153,7 @@ export function PlaceDiscovery({
 
                   {place.category && (
                     <p className="text-xs text-muted-foreground">
-                      {place.category}
+                      {getCategoryLabel(place.category)}
                     </p>
                   )}
                 </div>
@@ -165,7 +162,7 @@ export function PlaceDiscovery({
                   type="button"
                   disabled={isSaving}
                   onClick={() => handleSave(place)}
-                  className="mt-4 rounded-md border px-3 py-2 text-sm font-medium hover:bg-muted disabled:opacity-50"
+                  className="mt-auto rounded-md border px-3 py-2 text-sm font-medium hover:bg-muted disabled:opacity-50"
                 >
                   {isSaving ? "Saving..." : "Save"}
                 </button>

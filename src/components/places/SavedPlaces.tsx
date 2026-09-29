@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { removeTripPlace, type SavedPlace } from "@/lib/places/client";
+import { removeTripPlace } from "@/lib/places/client";
+import type { SavedPlace } from "@/lib/places/types";
 
 type SavedPlacesProps = {
   tripId: string;
@@ -48,17 +49,17 @@ export function SavedPlaces({
           Places you save for this trip will appear here.
         </p>
       ) : (
-        <ul className="mt-4 space-y-4">
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {places.map((place) => {
             const isRemoving = removingPlaceId === place.id;
 
             return (
               <li
                 key={place.id}
-                className="flex items-start justify-between gap-4"
+                className="flex min-w-0 items-start justify-between gap-3 rounded-xl border bg-background p-4"
               >
                 <div className="min-w-0">
-                  <p className="font-medium">{place.name}</p>
+                  <p className="truncate font-medium">{place.name}</p>
 
                   {place.address && (
                     <p className="mt-1 text-sm text-muted-foreground">

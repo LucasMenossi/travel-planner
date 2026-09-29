@@ -2,9 +2,10 @@ import Link from "next/link";
 import { ArrowLeft, CalendarDays, MapPin } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
-import { PlacesSection } from "@/components/places/PlacesSection";
+import { TripDetails } from "@/components/trips";
 import { getSession } from "@/lib/auth-session";
 import { getPlacesByTripId } from "@/server/places/queries";
+import { getItineraryItemsByTripId } from "@/server/itinerary/queries";
 import { getTripById } from "@/server/trips/queries";
 
 type TripPageProps = {
@@ -28,7 +29,10 @@ export default async function TripPage({ params }: TripPageProps) {
     notFound();
   }
 
-  const places = await getPlacesByTripId(trip.id, session.user.id);
+  const [places, itineraryItems] = await Promise.all([
+    getPlacesByTripId(trip.id, session.user.id),
+    getItineraryItemsByTripId(trip.id, session.user.id),
+  ]);
 
   const serializedPlaces = places.map((place) => ({
     ...place,
@@ -70,15 +74,16 @@ export default async function TripPage({ params }: TripPageProps) {
           </div>
         </header>
 
-        <section className="rounded-2xl border bg-card p-6">
-          <h2 className="font-heading text-xl font-semibold">Itinerary</h2>
-
-          <p className="mt-1 text-sm text-muted-foreground">
-            Your itinerary will appear here.
-          </p>
-        </section>
-
-        <PlacesSection tripId={trip.id} initialPlaces={serializedPlaces} />
+        <TripDetails
+          tripId={trip.id}
+          startDate={trip.startDate}
+          endDate={trip.endDate}
+          initialPlaces={serializedPlaces}
+          initialItems={itineraryItems.map((item) => ({
+            ...item,
+            placeName: item.placeName ?? null,
+          }))}
+        />
       </div>
     </main>
   );
