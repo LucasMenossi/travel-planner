@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { getSession } from "@/lib/auth-session";
 import { getTripById } from "@/server/trips/queries";
+import { getPlacesByTripId } from "@/server/places/queries";
 
 type TripPageProps = {
   params: Promise<{
@@ -25,6 +26,8 @@ export default async function TripPage({ params }: TripPageProps) {
   if (!trip) {
     notFound();
   }
+
+  const places = await getPlacesByTripId(trip.id);
 
   return (
     <main className="min-h-svh bg-background">
@@ -69,9 +72,25 @@ export default async function TripPage({ params }: TripPageProps) {
           <div className="rounded-2xl border bg-card p-6">
             <h2 className="font-semibold">Saved places</h2>
 
-            <p className="mt-2 text-sm text-muted-foreground">
-              Places you save for this trip will appear here.
-            </p>
+            {places.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Places you save for this trip will appear here.
+              </p>
+            ) : (
+              <ul className="mt-4 space-y-3">
+                {places.map((place) => (
+                  <li key={place.id}>
+                    <p className="font-medium">{place.name}</p>
+
+                    {place.address && (
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {place.address}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </section>
       </div>
@@ -89,5 +108,5 @@ function formatDateRange(startDate: string, endDate: string) {
     year: "numeric",
   });
 
-  return `${formatter.format(start)} – ${formatter.format(end)}`;
+  return `${formatter.format(start)} - ${formatter.format(end)}`;
 }
