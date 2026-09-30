@@ -17,6 +17,7 @@ type ItineraryProps = {
   endDate: string;
   places: SavedPlace[];
   initialItems: ItineraryItem[];
+  readOnly?: boolean;
 };
 
 export function Itinerary({
@@ -25,6 +26,7 @@ export function Itinerary({
   endDate,
   places,
   initialItems,
+  readOnly = false,
 }: ItineraryProps) {
   const dates = useMemo(
     () => getTripDates(startDate, endDate),
@@ -157,7 +159,7 @@ export function Itinerary({
           </p>
         </div>
 
-        {!isFormOpen && (
+        {!readOnly && !isFormOpen && (
           <Button type="button" onClick={() => openCreate(selectedDate)}>
             Add activity
           </Button>
@@ -216,7 +218,7 @@ export function Itinerary({
           <p className="text-xs text-muted-foreground">{selectedDate}</p>
         </div>
 
-        {isFormOpen && (
+        {!readOnly && isFormOpen && (
           <ItineraryForm
             tripId={tripId}
             places={places}
@@ -235,7 +237,7 @@ export function Itinerary({
 
         {selectedDayItems.length === 0 ? (
           <div className="rounded-xl border border-dashed p-6 text-sm text-muted-foreground">
-            Nothing planned for this day yet. Use “Add activity” above to plan your day.
+            {readOnly ? "Nothing planned for this day yet." : "Nothing planned for this day yet. Use “Add activity” above to plan your day."}
           </div>
         ) : (
           <ol className="space-y-3">
@@ -261,7 +263,8 @@ export function Itinerary({
                         )}
                       </div>
 
-                      <div className="flex shrink-0 flex-wrap gap-2">
+                      {!readOnly && (
+                        <div className="flex shrink-0 flex-wrap gap-2">
                         <button
                           type="button"
                           disabled={index === 0}
@@ -294,7 +297,8 @@ export function Itinerary({
                         >
                           Remove
                         </button>
-                      </div>
+                        </div>
+                      )}
                     </div>
               </li>
             ))}

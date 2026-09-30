@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { itineraryItem, trip } from "@/lib/db/schema";
+import { assertCanMutate } from "@/lib/user-access";
 
 type CreateTripInput = {
   userId: string;
@@ -17,6 +18,8 @@ type UpdateTripInput = CreateTripInput & {
 };
 
 export async function createTrip(input: CreateTripInput) {
+  await assertCanMutate(input.userId);
+
   const [createdTrip] = await db
     .insert(trip)
     .values({
@@ -33,6 +36,8 @@ export async function createTrip(input: CreateTripInput) {
 }
 
 export async function updateTrip(input: UpdateTripInput) {
+  await assertCanMutate(input.userId);
+
   const existingItems = await db
     .select({ date: itineraryItem.date })
     .from(itineraryItem)
@@ -62,6 +67,8 @@ export async function updateTrip(input: UpdateTripInput) {
 }
 
 export async function deleteTrip(tripId: string, userId: string) {
+  await assertCanMutate(userId);
+
   const [deletedTrip] = await db
     .delete(trip)
     .where(and(eq(trip.id, tripId), eq(trip.userId, userId)))

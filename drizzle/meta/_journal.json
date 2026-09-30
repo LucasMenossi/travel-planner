@@ -8,6 +8,13 @@
       "when": 1790646468026,
       "tag": "0000_wet_enchantress",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790794490216,
+      "tag": "0001_add_demo_user",
+      "breakpoints": true
     }
   ]
 }

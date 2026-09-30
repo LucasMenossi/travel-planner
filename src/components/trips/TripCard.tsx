@@ -1,17 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CalendarDays, MapPin, Pencil } from "lucide-react";
 
-import { DeleteTripButton } from "./DeleteTripButton";
 import type { trip } from "@/lib/db/schema";
-import Image from "next/image";
+
+import { DeleteTripButton } from "./DeleteTripButton";
 
 type Trip = typeof trip.$inferSelect;
 
 type TripCardProps = {
   trip: Trip;
+  readOnly?: boolean;
 };
 
-export function TripCard({ trip }: TripCardProps) {
+export function TripCard({ trip, readOnly = false }: TripCardProps) {
   return (
     <article className="overflow-hidden rounded-2xl border bg-card transition-shadow hover:shadow-lg">
       <Link href={`/trips/${trip.id}`} className="group block">
@@ -49,17 +51,19 @@ export function TripCard({ trip }: TripCardProps) {
         </div>
       </Link>
 
-      <div className="flex items-center justify-end gap-1 border-t px-4 py-3">
-        <Link
-          href={`/trips/${trip.id}/edit`}
-          className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <Pencil className="size-3.5" />
-          Edit
-        </Link>
+      {!readOnly && (
+        <div className="flex items-center justify-end gap-1 border-t px-4 py-3">
+          <Link
+            href={`/trips/${trip.id}/edit`}
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <Pencil className="size-3.5" />
+            Edit
+          </Link>
 
-        <DeleteTripButton tripId={trip.id} variant="icon" />
-      </div>
+          <DeleteTripButton tripId={trip.id} variant="icon" />
+        </div>
+      )}
     </article>
   );
 }

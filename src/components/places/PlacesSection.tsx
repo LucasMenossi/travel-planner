@@ -10,6 +10,7 @@ type PlacesSectionProps = {
   savedPlaces: SavedPlace[];
   onPlaceSaved: (place: SavedPlace) => void;
   onPlaceRemoved: (placeId: string) => void;
+  readOnly?: boolean;
 };
 
 export function PlacesSection({
@@ -17,6 +18,7 @@ export function PlacesSection({
   savedPlaces,
   onPlaceSaved,
   onPlaceRemoved,
+  readOnly = false,
 }: PlacesSectionProps) {
   return (
     <div className="space-y-8">
@@ -24,12 +26,14 @@ export function PlacesSection({
         tripId={tripId}
         places={savedPlaces}
         onPlaceRemoved={onPlaceRemoved}
+        readOnly={readOnly}
       />
 
       <PlaceDiscovery
         tripId={tripId}
         savedPlaces={savedPlaces}
         onPlaceSaved={onPlaceSaved}
+        readOnly={readOnly}
       />
     </div>
   );

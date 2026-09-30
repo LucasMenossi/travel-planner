@@ -50,6 +50,13 @@ Set the following values:
 DATABASE_URL=
 GEOAPIFY_API_KEY=
 NEXT_PUBLIC_GEOAPIFY_API_KEY=
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=http://localhost:3000
+
+# Optional portfolio demo account
+DEMO_USER_EMAIL=demo@example.com
+DEMO_USER_PASSWORD=DemoPass@123
+DEMO_USER_NAME=Travel Planner Demo
 ```
 
 `GEOAPIFY_API_KEY` is used server-side for Places and Geocoding. `NEXT_PUBLIC_GEOAPIFY_API_KEY` is used by the browser for the MapLibre map style.
@@ -97,3 +104,9 @@ End-to-end tests:
 ```bash
 npm run test:e2e
 ```
+
+## Demo account
+
+The portfolio deployment exposes a read-only demo account when `DEMO_USER_EMAIL` and `DEMO_USER_PASSWORD` are configured. Run `npm run db:seed:demo` against the target database to create the account and deterministic sample data. The login page exposes a **Try the demo** action, so the demo credentials do not need to be shown to visitors.
+
+The demo account is a normal authenticated user marked with `isDemo = true`. It can view its seeded trip, itinerary, saved places, map, and place discovery, but all data mutations are rejected server-side. This is intentionally not a general-purpose role/RBAC system.

@@ -14,6 +14,10 @@ export async function PATCH(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  if (session.user.isDemo) {
+    return NextResponse.json({ error: "Demo accounts are read-only." }, { status: 403 });
+  }
+
   const { tripId } = await params;
   const body = await request.json();
   const result = tripSchema.safeParse(body);
@@ -62,6 +66,10 @@ export async function DELETE(
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (session.user.isDemo) {
+    return NextResponse.json({ error: "Demo accounts are read-only." }, { status: 403 });
   }
 
   const { tripId } = await params;

@@ -35,14 +35,23 @@ export default async function TripsPage() {
             </p>
           </div>
 
-          <Link
-            href="/trips/new"
-            className="inline-flex h-9 shrink-0 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
-          >
-            <Plus className="size-4" />
-            New trip
-          </Link>
+          {!session.user.isDemo && (
+            <Link
+              href="/trips/new"
+              className="inline-flex h-9 shrink-0 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
+            >
+              <Plus className="size-4" />
+              New trip
+            </Link>
+          )}
         </header>
+
+        {session.user.isDemo && (
+          <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-muted-foreground">
+            You are viewing the demo account. This account is read-only, so you
+            can explore the trip without changing its data.
+          </div>
+        )}
 
         {trips.length === 0 ? (
           <section className="mt-10 rounded-2xl border border-dashed bg-card px-6 py-16 text-center">
@@ -60,19 +69,25 @@ export default async function TripsPage() {
                 and your itinerary.
               </p>
 
-              <Link
-                href="/trips/new"
-                className="mt-6 inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
-              >
-                <Plus className="size-4" />
-                Create your first trip
-              </Link>
+              {!session.user.isDemo && (
+                <Link
+                  href="/trips/new"
+                  className="mt-6 inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
+                >
+                  <Plus className="size-4" />
+                  Create your first trip
+                </Link>
+              )}
             </div>
           </section>
         ) : (
           <section className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {trips.map((trip) => (
-              <TripCard key={trip.id} trip={trip} />
+              <TripCard
+                key={trip.id}
+                trip={trip}
+                readOnly={session.user.isDemo}
+              />
             ))}
           </section>
         )}

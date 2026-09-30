@@ -19,6 +19,8 @@ export default async function EditTripPage({ params }: EditTripPageProps) {
     redirect("/auth/login");
   }
 
+  if (session.user.isDemo) redirect("/trips");
+
   const { tripId } = await params;
   const trip = await getTripById(tripId, session.user.id);
 

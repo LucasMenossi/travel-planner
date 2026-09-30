@@ -32,6 +32,7 @@ type TripDetailsProps = {
   endDate: string;
   initialPlaces: SavedPlace[];
   initialItems: ItineraryItem[];
+  readOnly?: boolean;
 };
 
 export function TripDetails({
@@ -40,6 +41,7 @@ export function TripDetails({
   endDate,
   initialPlaces,
   initialItems,
+  readOnly = false,
 }: TripDetailsProps) {
   const [savedPlaces, setSavedPlaces] = useState(initialPlaces);
 
@@ -64,6 +66,7 @@ export function TripDetails({
         endDate={endDate}
         places={savedPlaces}
         initialItems={initialItems}
+        readOnly={readOnly}
       />
 
       <TripMap places={savedPlaces} />
@@ -73,6 +76,7 @@ export function TripDetails({
         savedPlaces={savedPlaces}
         onPlaceSaved={handlePlaceSaved}
         onPlaceRemoved={handlePlaceRemoved}
+        readOnly={readOnly}
       />
     </div>
   );

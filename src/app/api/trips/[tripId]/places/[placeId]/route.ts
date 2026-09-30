@@ -17,6 +17,10 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  if (session.user.isDemo) {
+    return NextResponse.json({ error: "Demo accounts are read-only." }, { status: 403 });
+  }
+
   const { tripId, placeId } = await params;
 
   try {

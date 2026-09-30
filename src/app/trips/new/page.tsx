@@ -12,6 +12,8 @@ export default async function NewTripPage() {
     redirect("/auth/login");
   }
 
+  if (session.user.isDemo) redirect("/trips");
+
   return (
     <main className="min-h-svh bg-background">
       <div className="mx-auto max-w-2xl px-6 py-10">

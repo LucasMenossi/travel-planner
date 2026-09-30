@@ -75,24 +75,32 @@ export default async function TripPage({ params }: TripPageProps) {
             </div>
 
             <div className="flex shrink-0 items-center gap-2">
-              <Link
-                href={`/trips/${trip.id}/edit`}
+              {!session.user.isDemo && (
+                <Link
+                  href={`/trips/${trip.id}/edit`}
                 className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 text-sm font-medium transition-colors hover:bg-muted"
               >
-                <Pencil className="size-3.5" />
-                Edit trip
-              </Link>
-
-              <DeleteTripButton tripId={trip.id} redirectTo="/trips" />
+                  <Pencil className="size-3.5" />
+                  Edit trip
+                </Link>
+              )}
+              {!session.user.isDemo && <DeleteTripButton tripId={trip.id} redirectTo="/trips" />}
             </div>
           </div>
         </header>
+
+        {session.user.isDemo && (
+          <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm text-muted-foreground">
+            Demo account — this trip is read-only. You can explore the itinerary, map, and places without making changes.
+          </div>
+        )}
 
         <TripDetails
           tripId={trip.id}
           startDate={trip.startDate}
           endDate={trip.endDate}
           initialPlaces={serializedPlaces}
+          readOnly={session.user.isDemo}
           initialItems={itineraryItems.map((item) => ({
             ...item,
             placeName: item.placeName ?? null,

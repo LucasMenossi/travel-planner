@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { place, trip } from "@/lib/db/schema";
+import { assertCanMutate } from "@/lib/user-access";
 
 export type SavePlaceInput = {
   userId: string;
@@ -16,6 +17,8 @@ export type SavePlaceInput = {
 };
 
 export async function savePlace(input: SavePlaceInput) {
+  await assertCanMutate(input.userId);
+
   const [currentTrip] = await db
     .select({ id: trip.id })
     .from(trip)
@@ -69,6 +72,8 @@ export async function deletePlace({
   placeId: string;
   userId: string;
 }) {
+  await assertCanMutate(userId);
+
   const [currentTrip] = await db
     .select({ id: trip.id })
     .from(trip)

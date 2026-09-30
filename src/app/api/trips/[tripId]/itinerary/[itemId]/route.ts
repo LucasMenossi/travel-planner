@@ -22,6 +22,10 @@ export async function PATCH(request: Request, { params }: RouteContext) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
   }
 
+  if (session.user.isDemo) {
+    return NextResponse.json({ message: "Demo accounts are read-only." }, { status: 403 });
+  }
+
   const { tripId, itemId } = await params;
   const body = await request.json();
 
@@ -68,6 +72,10 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   const session = await getSession();
   if (!session) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
+  }
+
+  if (session.user.isDemo) {
+    return NextResponse.json({ message: "Demo accounts are read-only." }, { status: 403 });
   }
 
   const { tripId, itemId } = await params;

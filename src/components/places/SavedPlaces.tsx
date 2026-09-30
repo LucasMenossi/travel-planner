@@ -9,12 +9,14 @@ type SavedPlacesProps = {
   tripId: string;
   places: SavedPlace[];
   onPlaceRemoved: (placeId: string) => void;
+  readOnly?: boolean;
 };
 
 export function SavedPlaces({
   tripId,
   places,
   onPlaceRemoved,
+  readOnly = false,
 }: SavedPlacesProps) {
   const [removingPlaceId, setRemovingPlaceId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -72,14 +74,16 @@ export function SavedPlaces({
                   )}
                 </div>
 
-                <button
-                  type="button"
-                  disabled={isRemoving}
-                  onClick={() => handleRemove(place.id)}
-                  className="shrink-0 text-sm font-medium text-muted-foreground hover:text-destructive disabled:opacity-50"
-                >
-                  {isRemoving ? "Removing..." : "Remove"}
-                </button>
+                {!readOnly && (
+                  <button
+                    type="button"
+                    disabled={isRemoving}
+                    onClick={() => handleRemove(place.id)}
+                    className="shrink-0 text-sm font-medium text-muted-foreground hover:text-destructive disabled:opacity-50"
+                  >
+                    {isRemoving ? "Removing..." : "Remove"}
+                  </button>
+                )}
               </li>
             );
           })}

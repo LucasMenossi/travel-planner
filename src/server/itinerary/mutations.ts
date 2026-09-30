@@ -2,6 +2,7 @@ import { and, asc, eq, gt, lt, sql } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import { itineraryItem, place, trip } from "@/lib/db/schema";
+import { assertCanMutate } from "@/lib/user-access";
 import type {
   CreateItineraryItemInput,
   UpdateItineraryItemInput,
@@ -80,6 +81,8 @@ async function validateTimeOverlap({
 export async function createItineraryItem(
   input: CreateItineraryItemInput & { tripId: string; userId: string },
 ) {
+  await assertCanMutate(input.userId);
+
   const currentTrip = await getOwnedTrip(input.tripId, input.userId);
 
   if (!currentTrip) throw new Error("Trip not found.");
@@ -126,6 +129,8 @@ export async function updateItineraryItem(
     userId: string;
   },
 ) {
+  await assertCanMutate(input.userId);
+
   const currentTrip = await getOwnedTrip(input.tripId, input.userId);
   if (!currentTrip) throw new Error("Trip not found.");
 
@@ -218,6 +223,8 @@ export async function deleteItineraryItem({
   itemId: string;
   userId: string;
 }) {
+  await assertCanMutate(userId);
+
   const currentTrip = await getOwnedTrip(tripId, userId);
   if (!currentTrip) throw new Error("Trip not found.");
 
@@ -257,6 +264,8 @@ export async function reorderItineraryItem({
   userId: string;
   direction: "up" | "down";
 }) {
+  await assertCanMutate(userId);
+
   const currentTrip = await getOwnedTrip(tripId, userId);
   if (!currentTrip) throw new Error("Trip not found.");
 

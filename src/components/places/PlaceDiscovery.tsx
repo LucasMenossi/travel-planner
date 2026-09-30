@@ -1,9 +1,8 @@
 "use client";
 
-import { getCategoryLabel } from "@/lib/places/category-label";
-
 import { useState } from "react";
 
+import { getCategoryLabel } from "@/lib/places/category-label";
 import { saveTripPlace, searchTripPlaces } from "@/lib/places/client";
 import type { PlaceResult, SavedPlace } from "@/lib/places/types";
 
@@ -11,6 +10,7 @@ type PlaceDiscoveryProps = {
   tripId: string;
   savedPlaces: SavedPlace[];
   onPlaceSaved: (place: SavedPlace) => void;
+  readOnly?: boolean;
 };
 
 const CATEGORIES = [
@@ -32,6 +32,7 @@ export function PlaceDiscovery({
   tripId,
   savedPlaces,
   onPlaceSaved,
+  readOnly = false,
 }: PlaceDiscoveryProps) {
   const [category, setCategory] = useState(CATEGORIES[0].value);
   const [places, setPlaces] = useState<PlaceResult[]>([]);
@@ -61,6 +62,10 @@ export function PlaceDiscovery({
   }
 
   async function handleSave(place: PlaceResult) {
+    if (readOnly) {
+      return;
+    }
+
     setSavingPlaceId(place.externalId);
     setError(null);
 
@@ -112,8 +117,18 @@ export function PlaceDiscovery({
         </button>
       </div>
 
+      {readOnly && (
+        <p className="text-sm text-muted-foreground">
+          You are viewing this trip in read-only mode.
+        </p>
+      )}
+
       {error && (
-        <p role="alert" aria-live="assertive" className="text-sm text-destructive">
+        <p
+          role="alert"
+          aria-live="assertive"
+          className="text-sm text-destructive"
+        >
           {error}
         </p>
       )}
@@ -156,14 +171,16 @@ export function PlaceDiscovery({
                   )}
                 </div>
 
-                <button
-                  type="button"
-                  disabled={isSaving}
-                  onClick={() => handleSave(place)}
-                  className="mt-auto rounded-md border px-3 py-2 text-sm font-medium hover:bg-muted disabled:opacity-50"
-                >
-                  {isSaving ? "Saving..." : "Save"}
-                </button>
+                {!readOnly && (
+                  <button
+                    type="button"
+                    disabled={isSaving}
+                    onClick={() => handleSave(place)}
+                    className="mt-auto rounded-md border px-3 py-2 text-sm font-medium hover:bg-muted disabled:opacity-50"
+                  >
+                    {isSaving ? "Saving..." : "Save"}
+                  </button>
+                )}
               </article>
             );
           })}
