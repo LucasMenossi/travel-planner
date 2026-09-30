@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -12,6 +13,7 @@ import { tripSchema, type TripFormData } from "@/lib/validation/trips";
 
 export function CreateTripForm() {
   const router = useRouter();
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     register,
@@ -29,20 +31,30 @@ export function CreateTripForm() {
   });
 
   async function onSubmit(data: TripFormData) {
-    const response = await fetch("/api/trips", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    setServerError(null);
 
-    if (!response.ok) {
-      return;
+    try {
+      const response = await fetch("/api/trips", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        setServerError(
+          body?.error ?? "Could not create the trip. Please try again.",
+        );
+        return;
+      }
+
+      router.push("/trips");
+      router.refresh();
+    } catch {
+      setServerError("Unable to reach the server. Please try again.");
     }
-
-    router.push("/trips");
-    router.refresh();
   }
 
   return (
@@ -54,11 +66,14 @@ export function CreateTripForm() {
           id="name"
           placeholder="Summer in Japan"
           aria-invalid={!!errors.name}
+          aria-describedby={errors.name ? "name-error" : undefined}
           {...register("name")}
         />
 
         {errors.name && (
-          <p className="text-sm text-destructive">{errors.name.message}</p>
+          <p id="name-error" className="text-sm text-destructive">
+            {errors.name.message}
+          </p>
         )}
       </div>
 
@@ -69,11 +84,12 @@ export function CreateTripForm() {
           id="destination"
           placeholder="Tokyo, Japan"
           aria-invalid={!!errors.destination}
+          aria-describedby={errors.destination ? "destination-error" : undefined}
           {...register("destination")}
         />
 
         {errors.destination && (
-          <p className="text-sm text-destructive">
+          <p id="destination-error" className="text-sm text-destructive">
             {errors.destination.message}
           </p>
         )}
@@ -87,11 +103,12 @@ export function CreateTripForm() {
             id="startDate"
             type="date"
             aria-invalid={!!errors.startDate}
+          aria-describedby={errors.startDate ? "startDate-error" : undefined}
             {...register("startDate")}
           />
 
           {errors.startDate && (
-            <p className="text-sm text-destructive">
+            <p id="startDate-error" className="text-sm text-destructive">
               {errors.startDate.message}
             </p>
           )}
@@ -104,11 +121,14 @@ export function CreateTripForm() {
             id="endDate"
             type="date"
             aria-invalid={!!errors.endDate}
+          aria-describedby={errors.endDate ? "endDate-error" : undefined}
             {...register("endDate")}
           />
 
           {errors.endDate && (
-            <p className="text-sm text-destructive">{errors.endDate.message}</p>
+            <p id="endDate-error" className="text-sm text-destructive">
+              {errors.endDate.message}
+            </p>
           )}
         </div>
       </div>
@@ -124,15 +144,22 @@ export function CreateTripForm() {
           type="url"
           placeholder="https://example.com/image.jpg"
           aria-invalid={!!errors.coverImageUrl}
+          aria-describedby={errors.coverImageUrl ? "coverImageUrl-error" : undefined}
           {...register("coverImageUrl")}
         />
 
         {errors.coverImageUrl && (
-          <p className="text-sm text-destructive">
+          <p id="coverImageUrl-error" className="text-sm text-destructive">
             {errors.coverImageUrl.message}
           </p>
         )}
       </div>
+
+      {serverError && (
+        <p role="alert" className="text-sm text-destructive">
+          {serverError}
+        </p>
+      )}
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? "Creating trip..." : "Create trip"}

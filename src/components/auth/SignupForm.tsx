@@ -61,11 +61,14 @@ export function SignupForm() {
           autoComplete="name"
           placeholder="Your name"
           aria-invalid={!!errors.name}
+          aria-describedby={errors.name ? "name-error" : undefined}
           {...register("name")}
         />
 
         {errors.name && (
-          <p className="text-sm text-destructive">{errors.name.message}</p>
+          <p id="name-error" className="text-sm text-destructive">
+            {errors.name.message}
+          </p>
         )}
       </div>
 
@@ -78,11 +81,14 @@ export function SignupForm() {
           autoComplete="email"
           placeholder="you@example.com"
           aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? "email-error" : undefined}
           {...register("email")}
         />
 
         {errors.email && (
-          <p className="text-sm text-destructive">{errors.email.message}</p>
+          <p id="email-error" className="text-sm text-destructive">
+            {errors.email.message}
+          </p>
         )}
       </div>
 
@@ -94,11 +100,14 @@ export function SignupForm() {
           autoComplete="new-password"
           placeholder="At least 8 characters"
           aria-invalid={!!errors.password}
+          aria-describedby={errors.password ? "password-error" : undefined}
           {...register("password")}
         />
 
         {errors.password && (
-          <p className="text-sm text-destructive">{errors.password.message}</p>
+          <p id="password-error" className="text-sm text-destructive">
+            {errors.password.message}
+          </p>
         )}
       </div>
 
@@ -110,11 +119,12 @@ export function SignupForm() {
           autoComplete="new-password"
           placeholder="Repeat your password"
           aria-invalid={!!errors.confirmPassword}
+          aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
           {...register("confirmPassword")}
         />
 
         {errors.confirmPassword && (
-          <p className="text-sm text-destructive">
+          <p id="confirmPassword-error" className="text-sm text-destructive">
             {errors.confirmPassword.message}
           </p>
         )}

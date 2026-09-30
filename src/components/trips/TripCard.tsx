@@ -3,6 +3,7 @@ import { CalendarDays, MapPin, Pencil } from "lucide-react";
 
 import { DeleteTripButton } from "./DeleteTripButton";
 import type { trip } from "@/lib/db/schema";
+import Image from "next/image";
 
 type Trip = typeof trip.$inferSelect;
 
@@ -13,16 +14,17 @@ type TripCardProps = {
 export function TripCard({ trip }: TripCardProps) {
   return (
     <article className="overflow-hidden rounded-2xl border bg-card transition-shadow hover:shadow-lg">
-      <Link
-        href={`/trips/${trip.id}`}
-        className="group block"
-      >
+      <Link href={`/trips/${trip.id}`} className="group block">
         <div className="relative aspect-video overflow-hidden bg-muted">
           {trip.coverImageUrl ? (
-            <img
+            <Image
               src={trip.coverImageUrl}
-              alt=""
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              alt={`${trip.name} cover`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              unoptimized
+              loader={({ src }) => src}
             />
           ) : (
             <div className="flex h-full items-center justify-center bg-secondary">

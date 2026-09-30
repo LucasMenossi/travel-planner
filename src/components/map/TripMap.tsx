@@ -56,7 +56,6 @@ export function TripMap({ places }: TripMapProps) {
       markersRef.current = [];
       map.remove();
       mapRef.current = null;
-      setMapReady(false);
     };
   }, [apiKey]);
 
@@ -144,16 +143,16 @@ export function TripMap({ places }: TripMapProps) {
     places.length === 0 || placesWithCoordinates.length === 0;
 
   return (
-    <section className="overflow-hidden rounded-2xl border bg-card">
+    <section aria-labelledby="trip-map-heading" className="overflow-hidden rounded-2xl border bg-card">
       <div className="border-b px-6 py-4">
-        <h2 className="font-semibold">Trip map</h2>
+        <h2 id="trip-map-heading" className="font-semibold">Trip map</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Explore your saved places and select a marker for more information.
         </p>
       </div>
 
       <div className="relative">
-        <div ref={containerRef} className="h-[360px] w-full sm:h-[440px]" />
+        <div ref={containerRef} aria-label="Map showing saved trip places" role="application" className="h-[360px] w-full sm:h-[440px]" />
 
         {showMapMessage && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/80 p-6 backdrop-blur-sm">

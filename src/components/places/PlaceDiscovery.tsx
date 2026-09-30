@@ -91,6 +91,7 @@ export function PlaceDiscovery({
             key={item.value}
             type="button"
             onClick={() => setCategory(item.value)}
+            aria-pressed={category === item.value}
             className={
               category === item.value
                 ? "rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
@@ -112,13 +113,13 @@ export function PlaceDiscovery({
       </div>
 
       {error && (
-        <p role="alert" className="text-sm text-destructive">
+        <p role="alert" aria-live="assertive" className="text-sm text-destructive">
           {error}
         </p>
       )}
 
       {!isLoading && places.length === 0 && (
-        <p className="text-sm text-muted-foreground">
+        <p aria-live="polite" className="text-sm text-muted-foreground">
           Search for places near your destination.
         </p>
       )}

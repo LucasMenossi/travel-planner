@@ -35,34 +35,40 @@ export function TripForm({ tripId, initialValues }: TripFormProps) {
   });
 
   async function onSubmit(data: TripFormData) {
-    const response = await fetch(
-      tripId ? `/api/trips/${tripId}` : "/api/trips",
-      {
-        method: tripId ? "PATCH" : "POST",
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await fetch(
+        tripId ? `/api/trips/${tripId}` : "/api/trips",
+        {
+          method: tripId ? "PATCH" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      },
-    );
+      );
 
-    if (!response.ok) {
-      const body = await response.json().catch(() => null);
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
 
+        setError("root", {
+          message:
+            body?.error ??
+            (isEditing
+              ? "Could not update the trip. Please try again."
+              : "Could not create the trip. Please try again."),
+        });
+        return;
+      }
+
+      const updatedTrip = await response.json();
+
+      router.push(`/trips${isEditing ? `/${updatedTrip.id}` : ""}`);
+      router.refresh();
+    } catch {
       setError("root", {
-        message:
-          body?.error ??
-          (isEditing
-            ? "Could not update the trip. Please try again."
-            : "Could not create the trip. Please try again."),
+        message: "Unable to reach the server. Please try again.",
       });
-      return;
     }
-
-    const updatedTrip = await response.json();
-
-    router.push(`/trips${isEditing ? `/${updatedTrip.id}` : ""}`);
-    router.refresh();
   }
 
   return (
@@ -73,10 +79,13 @@ export function TripForm({ tripId, initialValues }: TripFormProps) {
           id="name"
           placeholder="Summer in Japan"
           aria-invalid={!!errors.name}
+          aria-describedby={errors.name ? "name-error" : undefined}
           {...register("name")}
         />
         {errors.name && (
-          <p className="text-sm text-destructive">{errors.name.message}</p>
+          <p id="name-error" className="text-sm text-destructive">
+            {errors.name.message}
+          </p>
         )}
       </div>
 
@@ -86,10 +95,11 @@ export function TripForm({ tripId, initialValues }: TripFormProps) {
           id="destination"
           placeholder="Tokyo, Japan"
           aria-invalid={!!errors.destination}
+          aria-describedby={errors.destination ? "destination-error" : undefined}
           {...register("destination")}
         />
         {errors.destination && (
-          <p className="text-sm text-destructive">
+          <p id="destination-error" className="text-sm text-destructive">
             {errors.destination.message}
           </p>
         )}
@@ -102,10 +112,11 @@ export function TripForm({ tripId, initialValues }: TripFormProps) {
             id="startDate"
             type="date"
             aria-invalid={!!errors.startDate}
+          aria-describedby={errors.startDate ? "startDate-error" : undefined}
             {...register("startDate")}
           />
           {errors.startDate && (
-            <p className="text-sm text-destructive">
+            <p id="startDate-error" className="text-sm text-destructive">
               {errors.startDate.message}
             </p>
           )}
@@ -117,10 +128,13 @@ export function TripForm({ tripId, initialValues }: TripFormProps) {
             id="endDate"
             type="date"
             aria-invalid={!!errors.endDate}
+          aria-describedby={errors.endDate ? "endDate-error" : undefined}
             {...register("endDate")}
           />
           {errors.endDate && (
-            <p className="text-sm text-destructive">{errors.endDate.message}</p>
+            <p id="endDate-error" className="text-sm text-destructive">
+            {errors.endDate.message}
+          </p>
           )}
         </div>
       </div>
@@ -135,10 +149,11 @@ export function TripForm({ tripId, initialValues }: TripFormProps) {
           type="url"
           placeholder="https://example.com/image.jpg"
           aria-invalid={!!errors.coverImageUrl}
+          aria-describedby={errors.coverImageUrl ? "coverImageUrl-error" : undefined}
           {...register("coverImageUrl")}
         />
         {errors.coverImageUrl && (
-          <p className="text-sm text-destructive">
+          <p id="coverImageUrl-error" className="text-sm text-destructive">
             {errors.coverImageUrl.message}
           </p>
         )}

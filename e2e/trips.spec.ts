@@ -17,7 +17,7 @@ test.describe("trips", () => {
   });
 
   test("edits a trip", async ({ page }) => {
-    const trip = await createTrip(page);
+    await createTrip(page);
 
     await page.getByRole("link", { name: "Edit trip" }).click();
 
@@ -56,7 +56,7 @@ test.describe("trips", () => {
   test("does not allow a trip date range to exclude existing itinerary activities", async ({
     page,
   }) => {
-    const trip = await createTrip(page);
+    await createTrip(page);
 
     await page.getByRole("button", { name: /Apr 11/ }).click();
     await page.getByRole("button", { name: "Add activity" }).click();

@@ -1,10 +1,29 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
 
 import { Itinerary, type ItineraryItem } from "@/components/itinerary";
 import { PlacesSection } from "@/components/places";
-import { TripMap } from "@/components/map";
+
+const TripMap = dynamic(
+  () => import("@/components/map").then((module) => module.TripMap),
+  {
+    ssr: false,
+    loading: () => (
+      <section
+        aria-labelledby="trip-map-heading"
+        className="overflow-hidden rounded-2xl border bg-card"
+      >
+        <div className="border-b px-6 py-4">
+          <h2 id="trip-map-heading" className="font-semibold">Trip map</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Loading map…</p>
+        </div>
+        <div className="h-[360px] w-full animate-pulse bg-muted sm:h-[440px]" />
+      </section>
+    ),
+  },
+);
 import type { SavedPlace } from "@/lib/places/types";
 
 type TripDetailsProps = {
