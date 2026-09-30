@@ -17,7 +17,6 @@ export function SavedPlaces({
   onPlaceRemoved,
 }: SavedPlacesProps) {
   const [removingPlaceId, setRemovingPlaceId] = useState<string | null>(null);
-
   const [error, setError] = useState<string | null>(null);
 
   async function handleRemove(placeId: string) {
@@ -35,8 +34,13 @@ export function SavedPlaces({
   }
 
   return (
-    <div className="rounded-2xl border bg-card p-6">
-      <h2 className="font-semibold">Saved places</h2>
+    <section
+      aria-labelledby="saved-places-heading"
+      className="rounded-2xl border bg-card p-6"
+    >
+      <h2 id="saved-places-heading" className="font-semibold">
+        Saved places
+      </h2>
 
       {error && (
         <p role="alert" className="mt-2 text-sm text-destructive">
@@ -81,6 +85,6 @@ export function SavedPlaces({
           })}
         </ul>
       )}
-    </div>
+    </section>
   );
 }

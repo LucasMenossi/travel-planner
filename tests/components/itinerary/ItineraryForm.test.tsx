@@ -67,7 +67,7 @@ describe("ItineraryForm", () => {
     await user.click(screen.getByRole("button", { name: "Add activity" }));
 
     expect(screen.getByRole("alert")).toHaveTextContent(
-      'This time overlaps with “Morning activity”.',
+      "This time overlaps with “Morning activity”.",
     );
     expect(fetch).not.toHaveBeenCalled();
     expect(onSaved).not.toHaveBeenCalled();
