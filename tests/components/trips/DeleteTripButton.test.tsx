@@ -22,31 +22,30 @@ describe("DeleteTripButton", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubGlobal("fetch", vi.fn());
-    vi.stubGlobal("confirm", vi.fn());
-    vi.stubGlobal("alert", vi.fn());
   });
 
   it("does not delete when the user cancels confirmation", async () => {
     const user = userEvent.setup();
-    vi.mocked(confirm).mockReturnValue(false);
 
     render(<DeleteTripButton tripId="trip-1" />);
 
     await user.click(screen.getByRole("button", { name: "Delete trip" }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("Delete this trip?")).toBeInTheDocument();
 
-    expect(confirm).toHaveBeenCalledWith(
-      "Delete this trip? This will also remove its saved places and itinerary.",
-    );
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(fetch).not.toHaveBeenCalled();
   });
 
   it("deletes the trip and navigates after confirmation", async () => {
     const user = userEvent.setup();
-    vi.mocked(confirm).mockReturnValue(true);
     vi.mocked(fetch).mockResolvedValueOnce(new Response(null, { status: 200 }));
 
     render(<DeleteTripButton tripId="trip-1" />);
 
+    await user.click(screen.getByRole("button", { name: "Delete trip" }));
     await user.click(screen.getByRole("button", { name: "Delete trip" }));
 
     expect(fetch).toHaveBeenCalledWith("/api/trips/trip-1", {
@@ -56,18 +55,19 @@ describe("DeleteTripButton", () => {
     expect(refresh).toHaveBeenCalled();
   });
 
-  it("shows an error when deletion fails", async () => {
+  it("shows an inline error when deletion fails", async () => {
     const user = userEvent.setup();
-    vi.mocked(confirm).mockReturnValue(true);
     vi.mocked(fetch).mockResolvedValueOnce(new Response(null, { status: 500 }));
 
     render(<DeleteTripButton tripId="trip-1" />);
 
     await user.click(screen.getByRole("button", { name: "Delete trip" }));
+    await user.click(screen.getByRole("button", { name: "Delete trip" }));
 
-    expect(alert).toHaveBeenCalledWith(
+    expect(await screen.findByRole("alert")).toHaveTextContent(
       "Could not delete the trip. Please try again.",
     );
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(push).not.toHaveBeenCalled();
   });
 });

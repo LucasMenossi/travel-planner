@@ -5,6 +5,16 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type DeleteTripButtonProps = {
   tripId: string;
@@ -19,15 +29,12 @@ export function DeleteTripButton({
 }: DeleteTripButtonProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleDelete() {
-    const confirmed = window.confirm(
-      "Delete this trip? This will also remove its saved places and itinerary.",
-    );
-
-    if (!confirmed) return;
-
     setIsDeleting(true);
+    setError(null);
 
     try {
       const response = await fetch(`/api/trips/${tripId}`, {
@@ -42,34 +49,71 @@ export function DeleteTripButton({
       router.refresh();
     } catch {
       setIsDeleting(false);
-      window.alert("Could not delete the trip. Please try again.");
+      setIsOpen(false);
+      setError("Could not delete the trip. Please try again.");
     }
   }
 
-  if (variant === "icon") {
-    return (
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        aria-label="Delete trip"
-        onClick={handleDelete}
-        disabled={isDeleting}
-      >
-        <Trash2 className="size-4" />
-      </Button>
-    );
-  }
-
   return (
-    <Button
-      type="button"
-      variant="outline"
-      onClick={handleDelete}
-      disabled={isDeleting}
-    >
-      <Trash2 className="size-4" />
-      {isDeleting ? "Deleting..." : "Delete trip"}
-    </Button>
+    <div className="flex flex-col items-end gap-2">
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          {variant === "icon" ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label="Delete trip"
+              disabled={isDeleting}
+              onClick={() => setError(null)}
+            >
+              <Trash2 className="size-4" />
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isDeleting}
+              onClick={() => setError(null)}
+            >
+              <Trash2 className="size-4" />
+              Delete trip
+            </Button>
+          )}
+        </DialogTrigger>
+
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete this trip?</DialogTitle>
+            <DialogDescription>
+              This will permanently remove the trip, including its saved places and
+              itinerary. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline" disabled={isDeleting}>
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete trip"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {error && (
+        <p role="alert" className="text-right text-sm text-destructive">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }

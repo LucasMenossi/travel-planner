@@ -37,15 +37,12 @@ test.describe("trips", () => {
   test("deletes a trip and returns to the trip list", async ({ page }) => {
     const trip = await createTrip(page);
 
-    page.once("dialog", async (dialog) => {
-      expect(dialog.type()).toBe("confirm");
-      expect(dialog.message()).toBe(
-        "Delete this trip? This will also remove its saved places and itinerary.",
-      );
-      await dialog.accept();
-    });
-
     await page.getByRole("button", { name: "Delete trip" }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Delete this trip?" }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Delete trip" }).last().click();
 
     await expect(page).toHaveURL(/\/trips$/);
     await expect(
